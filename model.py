@@ -101,7 +101,7 @@ class GlobalGenerator(nn.Module):
 
 
 class NLayerDiscriminator(nn.Module):
-    def __init__(self, input_nc, ndf=64, n_layers=3,
+    def __init__(self, input_nc, ndf=64, n_layers=4,
                  norm_layer=nn.BatchNorm2d,
                  use_sigmoid=True, use_bias=False):
         super(NLayerDiscriminator, self).__init__()

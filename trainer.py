@@ -10,8 +10,8 @@ from skimage.io import imsave
 # ~1.75s per batch for batch_size 64. 500 batches takes about 15 minutes
 class Trainer(object):
     def __init__(self, ckpt_dir, log_dir, dataset, dataloader,
-                 log_every=10, save_every=500,
-                 max_batches=20000, gen_lr=1e-5, dis_lr=1e-5):
+                 log_every=10, save_every=1,
+                 max_batches=20000, gen_lr=1e-4, dis_lr=1e-4):
 
         if not os.path.isdir(ckpt_dir):
             os.mkdir(ckpt_dir)
@@ -36,6 +36,8 @@ class Trainer(object):
         self.gen_loss = nn.MSELoss()
         self.recon_loss = VGG_perceptual_loss(pretrained=True, device=self.device)
         self.dis_loss = nn.MSELoss()  # LSGAN
+
+        np.random.seed(233)
 
     # only keep samples
     def get_batch(self):
@@ -123,6 +125,7 @@ class Trainer(object):
 
     def validate_and_save(self, generator, batch_num):
         idx = np.random.randint(self.dataset_len, size=(1,))[0]
+        print(idx)
         real_head, fake_head, top, bottom, left, right, real_full, fake_full \
             = self.dataset.get_full_sample(idx)
 
@@ -177,5 +180,5 @@ class Trainer(object):
 
             if batch % self.save_every == 0:
                 self.validate_and_save(generator, batch)
-                self.save_models(generator, discriminator, batch)
+                # self.save_models(generator, discriminator, batch)
                 torch.cuda.empty_cache()  # just for safety

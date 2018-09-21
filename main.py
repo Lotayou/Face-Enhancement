@@ -38,15 +38,15 @@ def load_models(directory, batch_num):
 
 def main():
     # configs
-    dataset_dir = 'data/ntu256_pairs'
-    pose_dir = 'data/ntu256_cords'
-    ckpt_dir = 'checkpoints'
-    log_dir = 'logs'
+    dataset_dir = 'data/dance_test'
+    pose_name = 'data/dance_test/dance_poses.npy'
+    ckpt_dir = 'checkpoints/dance_test'
+    log_dir = 'logs/dance_test'
     batch_num = 0
     batch_size = 64
 
     image_folder = dataset.ImageFolderDataset(dataset_dir, cache=os.path.join(dataset_dir, 'local.db'))
-    face_dataset = dataset.FaceCropDataset(image_folder, pose_dir, image_transforms)
+    face_dataset = dataset.FaceCropDataset(image_folder, pose_name, image_transforms)
     data_loader = DataLoader(face_dataset, batch_size=batch_size,
                              drop_last=True, num_workers=0, shuffle=True)
 
@@ -57,5 +57,10 @@ def main():
 
 
 if __name__ == '__main__':
+    # from skimage.io import imread, imsave
+    # img = imread('D:/Yanglingbo_Workspace_new/Projects/Python/Gayhub/pix2pixHD/datasets/pix2pix_dataset_nyoki-mtl/train_label/label_0000.png')
+    # print(img.shape)
+    # img = img * 12
+    # imsave('D:/Yanglingbo_Workspace_new/Projects/Python/Gayhub/pix2pixHD/datasets/pix2pix_dataset_nyoki-mtl/train_label/label_0000_enhanced.png', img)
     cudnn.benchmark = True
     main()
